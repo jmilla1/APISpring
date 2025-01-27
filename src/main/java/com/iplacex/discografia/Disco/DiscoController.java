@@ -57,6 +57,18 @@ public class DiscoController {
         return ResponseEntity.ok(discos);
     }
 
+    // Actualizar un disco por ID
+    @PutMapping(value = "/disco/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> handleUpdateDiscoRequest(@PathVariable String id, @RequestBody Disco disco) {
+    Optional<Disco> existingDisco = discoRepository.findById(id);
+        if (existingDisco.isPresent()) {
+            disco._id = id; // Aseguramos que el ID no cambie
+        return ResponseEntity.ok(discoRepository.save(disco));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Disco no encontrado");
+        }
+}
+
     // Eliminar un disco por ID
     @DeleteMapping(value = "/disco/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> handleDeleteDiscoRequest(@PathVariable String id) {
